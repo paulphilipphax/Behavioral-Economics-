@@ -2,8 +2,8 @@ set scheme s2color
 
 
 * Global Directories 
-global DirData "C:\Users\pah.fi\Desktop\STATA\Data"
-global DirResults "C:\Users\pah.fi\Desktop\STATA\Results"
+global DirData "C:\Users\pah.fi\Desktop\Irrationality\Data"
+global DirResults "C:\Users\pah.fi\Desktop\Irrationality\Results"
 
 
 *** Create Datasets ***
@@ -57,6 +57,20 @@ replace reveal_usage = q12_4 * 60 + q13_1
 
 label var reveal_usage "Revealed own daily usage in minutes"
 
+* Define difference of estimated own usage vs. others' usage 
+gen diff_usage = est_own_usage - est_other_usage
+label var diff_usage "Overestimation of you own usage to your peers "
+
+* Define dummy for which graphic has been shown 
+gen frame = . 
+replace frame = 1 if graphicshown == "high"
+replace frame = 0 if graphicshown == "low"
+
+* Define differenece of own usage to frame 
+gen diff_usage_frame = . 
+replace diff_usage_frame = est_own_usage - 28 if frame == 0 
+replace diff_usage_frame = est_own_usage - 128 if frame == 1 
+
 
 * Demographics 
 gen age = q15_1
@@ -78,8 +92,8 @@ replace female = 1 if q17 == 2
 replace nonbinary = 1 if q17 == 3
 
 * E-mail 
-gen missing_email = 1 
-replace missing_email = 0 if q18 == ""
+gen missing_email = 0
+replace missing_email = 1 if q18 == ""
 
 
 * Willingess to pay 
@@ -110,7 +124,7 @@ label var inconsistent "Observation has inconsistent WTP"
 gen wtp = .  
 label var wtp "WTP to keep IG usage private"
 
-replace wtp = -50 if sum_q11 == 10  
+replace wtp = -50 if sum_q11 == 10   
 replace wtp = -30 if switch_2 == 1
 replace wtp = -10 if switch_3 == 1
 replace wtp = 10 if switch_4 == 1
@@ -122,72 +136,174 @@ replace wtp = 110 if switch_9 == 1
 replace wtp = 130 if switch_10 == 1
 replace wtp = 150 if sum_q11 == 0
 
-* Replace wtp if answer is inconsistent 
-replace wtp = . if sum_switch > 1
+replace wtp = . if inconsistent == 1 
 
-* Define dummy for which graphic has been shown 
-gen frame = . 
-replace frame = 1 if graphicshown == "high"
-replace frame = 0 if graphicshown == "low"
+* wtp new definiton 
 
-* Define difference of estimated own usage vs. others' usage 
-gen diff_usage = est_own_usage - est_other_usage
-label var diff_usage "Overestimation of you own usage to your peers "
+gen shy = 0 
+replace shy = 1 if sum_q11 == 0 
 
-* Define differenece of own usage to frame 
-gen diff_usage_frame = . 
-replace diff_usage_frame = est_own_usage - 28 if frame == 0 
-replace diff_usage_frame = est_own_usage - 128 if frame == 1 
+gen proud = 0 
+replace proud = 1 if sum_q11 == 10 
+
+gen slightly_proud = 0 
+replace slightly_proud = 1 if switch_2 == 1  
+
+gen indiff_show = 0 
+replace indiff_show = 1 if switch_3 == 1 
+
+gen indiff_private = 0 
+replace indiff_private = 1 if switch_4 == 1 
+
+gen slightly_shy = 0 
+replace slightly_shy = 1 if wtp > 10 & wtp < 150 
+
+gen wtp_categories = "other"
+replace wtp_categories = "shy" if shy == 1 
+replace wtp_categories = "proud" if proud == 1 
+replace wtp_categories = "slightly proud" if slightly_proud == 1
+replace wtp_categories = "indifferent show" if indiff_show == 1
+replace wtp_categories = "indifferent private" if indiff_private == 1
+replace wtp_categories = "slightly shy" if slightly_shy == 1
+
 
 * Save Dataset 
 save $DirData/Analysis.dta, replace
 
-*** Summary Statistic *** 
+*** SumStat *** 
 
-use $DirData/Analysis.dta, clear 
-local varlist male female nonbinary bachelor master phd age est_own_usage est_other_usage diff_usage frame wtp inconsistent reveal_usage
+use $DirData/Analysis.dta, clear
+
+
+
+*** Overview WTP Observations ***
+
+use $DirData/Analysis.dta, clear
+
+tab wtp 
+return list 
+
+tabulate wtp, matcell(freq_matrix)
+matrix list freq_matrix
+
+*** Results 1 *** 
+
+use $DirData/Analysis.dta, clear
+drop if inconsistent == 1 
+ 
+local varlist male female bachelor master age est_own_usage est_other_usage diff_usage frame reveal_usage
 
 foreach var in `varlist'{ 
+	*qui sum `var', detail 
+	*replace `var' = . if `var' < r(p5) | `var' > r(p95) 
 	gen `var'_mean = `var'
-	gen `var'_med = `var'
-	local varlist_mean `varlist_mean' `var'_mean
-	local varlist_med `varlist_med' `var'_med
+}
+
+gen count = male
+gen count_reveal_usage = reveal_usage 
+local varlist_count count count_reveal_usage 
+
+collapse (mean) `varlist' (count) `varlist_count', by(wtp_categories)
+
+order wtp_categories count male female age bachelor master est_own_usage est_other_usage frame reveal_usage count_reveal_usage
+
+gen value = 0 
+replace value = 1 if wtp_categories == "shy"
+replace value = 2 if wtp_categories == "slightly shy"
+replace value = 3 if wtp_categories == "indifferent show"
+replace value = 4 if wtp_categories == "indifferent private"
+replace value = 5 if wtp_categories == "proud"
+
+sort value 
+
+graph bar est_own_usage reveal_usage, over(wtp_categories)
+
+*** Distributions *** 
+
+use $DirData/Analysis.dta, clear
+drop if inconsistent == 1 
+ 
+local varlist male female bachelor master age est_own_usage est_other_usage diff_usage frame reveal_usage
+
+foreach var in `varlist'{ 
+	qui sum `var', detail 
+	replace `var' = . if `var' < r(p5) | `var' > r(p95) 
 }
 
 
-collapse (mean) `varlist_mean' (median) `varlist_med' (count) `varlist'
-
-* Histograms 
 hist est_own_usage
+ 
+hist wtp 
+hist lreveal_usage
 
-hist est_other_usage
+hist lest_own_usage
+hist wtp 
 
-hist diff_usage, ///
-	title ("Perception of own vs. peer usage")
+twoway ///
+	(hist est_own_usage, color(blue))  ///
+	(hist est_other_usage, color(red)),
+	title ("Estimation of own vs. peer usage")
+	
+*** Regression Models for WTP using the whole sample ***	
 
-hist diff_usage_frame 
+use $DirData/Analysis.dta, clear
+drop if inconsistent == 1 
+rename frame high_frame 
 
-hist lwtp, bins(9)
+reg wtp est_own_usage male bachelor age, robust  
+eststo model1
 
-* Regressions 
+reg wtp est_other_usage high_frame male bachelor age, robust
+eststo model2
+
+reg wtp high_frame male bachelor age, robust
+eststo model3
+
+reg wtp  high_frame est_own_usage male bachelor age, robust
+eststo model4
+
+esttab model1 model2 model3 model4 using "$DirResults\Reg1.tex", replace tex ///
+	order(est_own_usage est_other_usage high_frame male bachelor age) ///
+	compress 
+
+
+*** Fuctional Form  of WTP on revealed usage ***
+
+use $DirData/Analysis.dta, clear
+drop if inconsistent == 1 
+  
+foreach var in reveal_usage { 
+	gen sq`var' = `var' ^2 
+	gen power`var' = `var' ^(4/3)
+}
+
+rename frame high_frame
+
+reg wtp reveal_usage high_frame male bachelor age, robust  
+eststo model1
+
+reg wtp reveal_usage high_frame sqreveal_usage male bachelor age, robust
+eststo model2
+
+reg wtp sqreveal_usage high_frame male bachelor age, robust
+eststo model3
+
+reg wtp powerreveal_usage high_frame male bachelor age, robust
+eststo model4
+
+esttab model1 model2 model3 model4 
+
+
+using "$DirResults\Reg3.tex", replace tex ///
+	order(reveal_usage sqreveal_usage powerreveal_usage high_frame male age bachelor) ///
+	compress 
+
+*** Regression trying to explain real usage *** 
+
 use $DirData/Analysis.dta, clear
 
-gen shifted_wtp = wtp + 51  
+reg reveal_usage est_own_usage male age bachelor, robust   
+* Estimate own usage is significant 
 
-gen lwtp = log(shifted_wtp)
-
-reg lwtp male bachelor age frame if wtp < 150 & wtp > -50, robust 
-
-reg est_own_usage male bachelor age, robust 
-
-reg reveal_usage male bachelor age, robust
-
-gen wtp_per_usage = wtp / est_own_usage
-
-
-reg wtp_per_usage male bachelor age est_other_usage  if wtp_per_usage > -5 & wtp_per_usage < 5 
-
-hist wtp_per_usage 
-
-
-
+*** Estimation of own usage *** 
+reg est_own_usage est_other_usage male bachelor age, robust 
