@@ -1,0 +1,42 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{4}{c}}
+\hline\hline
+          &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\
+          &\multicolumn{1}{c}{wtp}&\multicolumn{1}{c}{wtp}&\multicolumn{1}{c}{wtp}&\multicolumn{1}{c}{wtp}\\
+\hline
+wtp       &                  &                  &                  &                  \\
+reveal\_usage&    0.284\sym{**} &    0.284\sym{**} &    0.273\sym{**} &    0.272\sym{**} \\
+          & (0.0960)         & (0.0960)         &  (0.101)         &  (0.101)         \\
+[1em]
+high\_frame&   -0.525         &   -0.525         &    0.589         &    0.549         \\
+          &  (9.473)         &  (9.473)         &  (10.02)         &  (10.02)         \\
+[1em]
+est\_own\_usage&                  &                  &  -0.0470         &  -0.0390         \\
+          &                  &                  & (0.0694)         & (0.0848)         \\
+[1em]
+est\_other\_usage&                  &                  &                  &  -0.0138         \\
+          &                  &                  &                  & (0.0848)         \\
+[1em]
+male      &    20.05\sym{*}  &    20.05\sym{*}  &    17.52         &    17.56         \\
+          &  (9.565)         &  (9.565)         &  (10.28)         &  (10.27)         \\
+[1em]
+age       &   -5.912         &   -5.912         &   -5.106         &   -5.147         \\
+          &  (3.615)         &  (3.615)         &  (3.897)         &  (3.902)         \\
+[1em]
+bachelor  &   -22.62         &   -22.62         &   -23.71         &   -23.45         \\
+          &  (12.75)         &  (12.75)         &  (13.58)         &  (13.66)         \\
+[1em]
+\_cons    &    98.33         &    98.33         &    89.42         &    91.63         \\
+          &  (85.54)         &  (85.54)         &  (91.99)         &  (92.91)         \\
+\hline
+/         &                  &                  &                  &                  \\
+var(e.wtp)&   2320.8\sym{***}&   2320.8\sym{***}&   2395.5\sym{***}&   2392.1\sym{***}\\
+          &  (421.2)         &  (421.2)         &  (449.7)         &  (449.4)         \\
+\hline
+\(N\)     &      118         &      118         &      109         &      109         \\
+\hline\hline
+\multicolumn{5}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{5}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+\end{tabular}
+}
