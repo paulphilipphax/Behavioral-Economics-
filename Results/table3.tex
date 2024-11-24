@@ -1,0 +1,46 @@
+\begin{table}[htbp]\centering
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\caption{Main Regressions}
+\begin{tabular}{l*{4}{c}}
+\hline\hline
+                    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\
+                    &\multicolumn{1}{c}{WTP to keep IG usage private}&\multicolumn{1}{c}{WTP to keep IG usage private}&\multicolumn{1}{c}{Estimated own daily usage in minutes}&\multicolumn{1}{c}{Estimated own daily usage in minutes}\\
+\hline
+main                &                     &                     &                     &                     \\
+Estimate own usage  &        0.05         &                     &                     &                     \\
+                    &      (0.13)         &                     &                     &                     \\
+[1em]
+Estimate peer usage &        0.06         &                     &        0.64\sym{***}&        0.60\sym{***}\\
+                    &      (0.14)         &                     &      (0.08)         &      (0.09)         \\
+[1em]
+High frame          &        2.87         &       -0.52         &       -1.45         &                     \\
+                    &     (19.36)         &      (9.47)         &     (11.34)         &                     \\
+[1em]
+True usage          &                     &        0.28\sym{**} &                     &        0.23\sym{*}  \\
+                    &                     &      (0.10)         &                     &      (0.11)         \\
+[1em]
+Male                &       20.60         &       20.05\sym{*}  &      -18.89\sym{*}  &      -15.41         \\
+                    &     (19.69)         &      (9.56)         &      (9.11)         &     (11.22)         \\
+[1em]
+Bachelor            &      -29.52         &      -22.62         &      -30.56         &       -8.18         \\
+                    &     (25.63)         &     (12.75)         &     (26.10)         &     (17.10)         \\
+[1em]
+Age                 &       -5.49         &       -5.91         &       -4.73         &        5.87         \\
+                    &      (7.04)         &      (3.62)         &      (6.29)         &      (4.22)         \\
+[1em]
+WTP                 &                     &                     &        0.03         &                     \\
+                    &                     &                     &      (0.08)         &                     \\
+[1em]
+Constant            &      154.17         &       98.33         &      143.87         &     -111.38         \\
+                    &    (168.52)         &     (85.54)         &    (153.35)         &    (101.28)         \\
+\hline
+/                   &                     &                     &                     &                     \\
+var(e.wtp)          &    17149.35\sym{***}&     2320.77\sym{***}&                     &                     \\
+                    &   (2669.59)         &    (421.17)         &                     &                     \\
+\hline
+Observations        &         210         &         118         &         210         &         118         \\
+\hline\hline
+\multicolumn{5}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{5}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+\end{tabular}
+\end{table}

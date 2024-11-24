@@ -1,5 +1,5 @@
 *** Create Datasets ***
-import delimited "$DirData\Instagram Usage_November 17, 2024_07.16.csv", clear varnames (1) 
+import delimited "$DirData/Instagram Usage_November 17, 2024_07.16.csv", clear varnames (1) 
 
 drop in 1/11
 
@@ -11,7 +11,7 @@ destring `varlist', replace
 gen day = substr(startdate,9,2)
 order day 
 
-*Drop observations of day 6 
+*Drop observations of day 6
 drop if day == "06" 
 
 * Drop test obsevations 
@@ -160,7 +160,17 @@ replace wtp_categories = "indifferent show" if indiff_show == 1
 replace wtp_categories = "indifferent private" if indiff_private == 1
 replace wtp_categories = "slightly shy" if slightly_shy == 1
 
-
 * Save Dataset 
+label variable wtp "WTP"
 save $DirData/Analysis.dta, replace
+
+
+
+
+
+
+
+
+
+
 

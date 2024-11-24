@@ -58,92 +58,128 @@ foreach var in `varlist'{
 	replace `var' = . if `var' < r(p5) | `var' > r(p95) 
 }
 
-
 hist est_own_usage
  
-hist wtp 
+hist wtp, bins(9)
+
 hist lreveal_usage
 
 hist lest_own_usage
-hist wtp 
+
+hist wtp
 
 twoway ///
 	(hist est_own_usage, color(blue))  ///
 	(hist est_other_usage, color(red)),
 	title ("Estimation of own vs. peer usage")
-	
-*** Regression Models for WTP using the whole sample ***	
+
+*** Table 3: Main Regressions  ***	
+
+use ${DirData}Analysis.dta, clear
+drop if inconsistent == 1 
+rename frame high_frame 
+est clear 
+
+tobit wtp est_own_usage est_other_usage high_frame male bachelor age, ll(-50) ul(150)
+eststo model1
+
+tobit wtp reveal_usage high_frame male bachelor age, ll(-50) ul(150) 
+eststo model2
+
+reg est_own_usage est_other_usage male bachelor age, robust 
+eststo model3
+
+reg est_own_usage est_other_usage reveal_usage male bachelor age, robust 
+eststo model4
+
+esttab model1 model2 model3 model4 using "${DirResults}table3.tex", replace label compress ///
+	title(Main Regressions ) ///
+	order(est_own_usage est_other_usage high_frame reveal_usage male bachelor age) ///
+	se(2) b(2) ///
+	coeflabels( est_own_usage "Estimate own usage" est_other_usage "Estimate peer usage" high_frame "High frame" 	reveal_usage "True usage" male "Male" bachelor "Bachelor" age "Age")
+		
+*** Appendix 1: Regression Models for WTP using the whole sample ***	
 
 use $DirData/Analysis.dta, clear
 drop if inconsistent == 1 
 rename frame high_frame 
+	
 
-reg wtp est_own_usage male bachelor age, robust  
+tobit wtp est_own_usage male bachelor age, ll(-50) ul(150)
 eststo model1
 
-reg wtp est_other_usage high_frame male bachelor age, robust
+tobit wtp est_other_usage high_frame male bachelor age, ll(-50) ul(150)
 eststo model2
 
-reg wtp high_frame male bachelor age, robust
+tobit wtp high_frame male bachelor age, ll(-50) ul(150)
 eststo model3
 
-reg wtp  high_frame est_own_usage male bachelor age, robust
+tobit wtp  high_frame est_own_usage male bachelor age, ll(-50) ul(150)
 eststo model4
 
-esttab model1 model2 model3 model4 using "$DirResults\reg1.tex", replace tex ///
-	order(est_own_usage est_other_usage high_frame male bachelor age) ///
-	compress 
-
-
-*** Reg 3: WTP on revealed usage ***
+esttab model1 model2 model3 model4 using "${DirResults}table4.tex", replace label compress ///
+	title(Regression Models for WTP using the whole sample) ///
+	se(2) b(2) ///
+	coeflabels( est_own_usage "Estimate own usage" est_other_usage "Estimate peer usage" high_frame "High frame" 	reveal_usage "True usage" male "Male" bachelor "Bachelor" age "Age")
+		
+		
+*** Appendix 2: WTP using revealed usage sample ***
 
 use $DirData/Analysis.dta, clear
 drop if inconsistent == 1 
-  
+rename frame high_frame
+
+
 foreach var in reveal_usage { 
 	gen sq`var' = `var' ^2 
 }
 
-rename frame high_frame
 
-tobit wtp reveal_usage high_frame male bachelor age, ll(-50) ul(150)
-eststo coef1 
-estpost margins, dydx(*)
-eststo margins1 
+tobit wtp high_frame male bachelor age, ll(-50) ul(150) 
+eststo model1 
 
-tobit wtp reveal_usage high_frame male bachelor age, ll(-50) ul(150)
-eststo coef2
-estpost margins, dydx(*)
-eststo margins2
-
+tobit wtp reveal_usage sqreveal_usage high_frame male bachelor age, ll(-50) ul(150)
+eststo model2
 
 tobit wtp reveal_usage est_own_usage high_frame  male bachelor age, ll(-50) ul(150)
-eststo coef3
-estpost margins, dydx(*)
-eststo margins3
-
+eststo model3
 
 tobit wtp reveal_usage est_own_usage est_other_usage high_frame male bachelor age, ll(-50) ul(150)
-eststo coef4
-estpost margins, dydx(*)
-eststo margins4
+eststo model4
 
-esttab coef1 coef2 coef3 coef4 using "$DirResults\reg3_tobit.tex", replace tex ///
-	se compress ///
-	order(reveal_usage high_frame est_own_usage est_other_usage male age bachelor)
-
-esttab margins1 margins2 margins3 margins4 using "$DirResults\reg3_tobit_margins.tex", replace tex ///
-	se compress ///
-	order(reveal_usage high_frame est_own_usage est_other_usage male age bachelor)
+esttab model1 model2 model3 model4 using "${DirResults}table5.tex", replace label compress ///
+	title(WTP using revealed usage sample ) ///
+	se(2) b(2) ///
+	coeflabels(est_own_usage "Estimate own usage" est_other_usage "Estimate peer usage" high_frame "High frame" 	reveal_usage "True usage" sqreveal_usage "True usage ^ 2 " male "Male" bachelor "Bachelor" age "Age")
 
 	
-	
-*** Regression trying to explain real usage *** 
+*** Appendix 3: Regressions explaining estimate of own usage *** 
 
 use $DirData/Analysis.dta, clear
+drop if inconsistent == 1 
+rename frame high_frame
 
-reg reveal_usage est_own_usage male age bachelor, robust   
-* Estimate own usage is significant 
-
-*** Estimation of own usage *** 
 reg est_own_usage est_other_usage male bachelor age, robust 
+
+reg est_own_usage est_other_usage reveal_usage male bachelor age, robust 
+
+reg est_own_usage est_other_usage wtp high_frame male bachelor age, robust 
+
+reg est_own_usage est_other_usage reveal_usage wtp high_frame male bachelor age, robust 
+
+esttab model1 model2 model3 model4 using "${DirResults}table6.tex", replace label compress ///
+	title(Regressions explaining estimate of own usage) ///
+	se(2) b(2) ///
+	coeflabels(wtp "WTP" est_own_usage "Estimate own usage" est_other_usage "Estimate peer usage" high_frame "High frame" 	reveal_usage "True usage" male "Male" bachelor "Bachelor" age "Age")
+
+
+
+
+
+
+
+
+
+
+
+

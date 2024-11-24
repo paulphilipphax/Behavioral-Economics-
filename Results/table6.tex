@@ -1,0 +1,46 @@
+\begin{table}[htbp]\centering
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\caption{Regressions explaining estimate of own usage}
+\begin{tabular}{l*{4}{c}}
+\hline\hline
+                &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\
+                &\multicolumn{1}{c}{WTP}&\multicolumn{1}{c}{WTP}&\multicolumn{1}{c}{WTP}&\multicolumn{1}{c}{WTP}\\
+\hline
+WTP             &                  &                  &                  &                  \\
+High frame      &     3.51         &    -0.87         &    -0.61         &    -0.75         \\
+                &  (19.37)         &   (9.41)         &   (9.48)         &   (9.47)         \\
+[1em]
+Male            &    18.94         &    21.14\sym{*}  &    19.49\sym{*}  &    19.45\sym{*}  \\
+                &  (19.54)         &   (9.58)         &   (9.70)         &   (9.69)         \\
+[1em]
+Bachelor        &   -30.54         &   -23.34         &   -22.59         &   -22.07         \\
+                &  (25.41)         &  (12.70)         &  (12.75)         &  (12.84)         \\
+[1em]
+Age             &    -6.10         &    -5.91         &    -5.83         &    -5.94         \\
+                &   (7.01)         &   (3.59)         &   (3.62)         &   (3.63)         \\
+[1em]
+True usage      &                  &     0.06         &     0.29\sym{**} &     0.29\sym{**} \\
+                &                  &   (0.26)         &   (0.10)         &   (0.10)         \\
+[1em]
+sqreveal\_usage  &                  &     0.00         &                  &                  \\
+                &                  &   (0.00)         &                  &                  \\
+[1em]
+Estimate own usage&                  &                  &    -0.02         &    -0.01         \\
+                &                  &                  &   (0.06)         &   (0.08)         \\
+[1em]
+Estimate peer usage&                  &                  &                  &    -0.02         \\
+                &                  &                  &                  &   (0.08)         \\
+[1em]
+Constant        &   185.59         &   105.32         &    99.12         &   103.64         \\
+                & (165.06)         &  (85.38)         &  (85.59)         &  (86.73)         \\
+\hline
+/               &                  &                  &                  &                  \\
+var(e.wtp)      & 17215.89\sym{***}&  2289.29\sym{***}&  2319.87\sym{***}&  2313.70\sym{***}\\
+                &(2680.35)         & (415.69)         & (421.00)         & (420.11)         \\
+\hline
+Observations    &      210         &      118         &      118         &      118         \\
+\hline\hline
+\multicolumn{5}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{5}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+\end{tabular}
+\end{table}

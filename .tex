@@ -1,0 +1,43 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{4}{c}}
+\toprule
+            &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\
+            &\multicolumn{1}{c}{wtp}&\multicolumn{1}{c}{wtp}&\multicolumn{1}{c}{est\_own\_usage}&\multicolumn{1}{c}{est\_own\_usage}\\
+\midrule
+main        &                     &                     &                     &                     \\
+est\_own\_usage&      0.0492         &                     &                     &                     \\
+            &     (0.128)         &                     &                     &                     \\
+\addlinespace
+est\_other\_usage&      0.0580         &                     &       0.646\sym{***}&       0.600\sym{***}\\
+            &     (0.138)         &                     &    (0.0815)         &    (0.0894)         \\
+\addlinespace
+high\_frame  &       2.868         &      -0.525         &                     &                     \\
+            &     (19.36)         &     (9.473)         &                     &                     \\
+\addlinespace
+reveal\_usage&                     &       0.284\sym{**} &                     &       0.227\sym{*}  \\
+            &                     &    (0.0960)         &                     &     (0.106)         \\
+\addlinespace
+male        &       20.60         &       20.05\sym{*}  &      -18.71\sym{*}  &      -15.41         \\
+            &     (19.69)         &     (9.565)         &     (9.029)         &     (11.22)         \\
+\addlinespace
+bachelor    &      -29.52         &      -22.62         &      -31.10         &      -8.182         \\
+            &     (25.63)         &     (12.75)         &     (26.71)         &     (17.10)         \\
+\addlinespace
+age         &      -5.486         &      -5.912         &      -4.860         &       5.873         \\
+            &     (7.038)         &     (3.615)         &     (6.616)         &     (4.217)         \\
+\addlinespace
+\_cons      &       154.2         &       98.33         &       147.4         &      -111.4         \\
+            &     (168.5)         &     (85.54)         &     (159.0)         &     (101.3)         \\
+\midrule
+/           &                     &                     &                     &                     \\
+var(e.wtp)  &     17149.4\sym{***}&      2320.8\sym{***}&                     &                     \\
+            &    (2669.6)         &     (421.2)         &                     &                     \\
+\midrule
+\(N\)       &         210         &         118         &         210         &         118         \\
+\(R^{2}\)   &                     &                     &       0.358         &       0.380         \\
+\bottomrule
+\multicolumn{5}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{5}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+\end{tabular}
+}
