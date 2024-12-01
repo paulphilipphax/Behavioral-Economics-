@@ -1,7 +1,8 @@
 *** Create Datasets ***
 import delimited "$DirData/Instagram Usage_November 17, 2024_07.16.csv", clear varnames (1) 
 
-drop in 1/11
+
+drop in 1/11902092
 
 * Destring variables 
 describe, varlist
@@ -85,9 +86,6 @@ replace male = 1 if q17 == 1
 replace female = 1 if q17 == 2
 replace nonbinary = 1 if q17 == 3
 
-* E-mail 
-gen missing_email = 0
-replace missing_email = 1 if q18 == ""
 
 
 * Willingess to pay 
