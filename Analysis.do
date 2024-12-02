@@ -92,7 +92,7 @@ eststo model3
 reg est_own_usage est_other_usage reveal_usage male bachelor age, robust 
 eststo model4
 
-esttab model1 model2 model3 model4 using "${DirResults}table3.tex", replace label compress ///
+esttab model1 model2 model3 model4 using "${DirResults}table3.tex", replace label ///
 	title(Main Regressions ) ///
 	order(est_own_usage est_other_usage high_frame reveal_usage male bachelor age) ///
 	se(2) b(2) ///
@@ -147,7 +147,7 @@ eststo model3
 tobit wtp reveal_usage est_own_usage est_other_usage high_frame male bachelor age, ll(-50) ul(150)
 eststo model4
 
-esttab model1 model2 model3 model4 using "${DirResults}table5.tex", replace label compress ///
+esttab model1 model2 model3 model4 using "${DirResults}table5.tex", replace label ///
 	title(WTP using revealed usage sample ) ///
 	se(2) b(2) ///
 	coeflabels(est_own_usage "Estimate own usage" est_other_usage "Estimate peer usage" high_frame "High frame" 	reveal_usage "True usage" sqreveal_usage "True usage ^ 2 " male "Male" bachelor "Bachelor" age "Age")
